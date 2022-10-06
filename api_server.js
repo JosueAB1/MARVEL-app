@@ -145,6 +145,8 @@ app.get('/marvel/comics/events/:id', (req, res) => {
         })
 })
 
+
+//POST
 app.post("/Marvel/:id", (req, res)=> {
 
     //Validation
@@ -167,6 +169,118 @@ app.post("/Marvel/:id", (req, res)=> {
     res.status(200)
     res.send("OK")
 })
+
+app.post("/Marvel_Comics", (req, res)=> {
+    const id = req.params.id
+    //Validation
+    const END_POINT = `http://gateway.marvel.com/v1/public/comics/${id}?ts=1000&apikey=${API_KEY}&hash=${HASH}`
+    console.log("END_POINT: " + END_POINT)
+    axios.get(END_POINT)
+
+        .then(function(response) {
+            console.log("RES: "+ response.data)
+            res.json(
+                {
+                    story: response.data.data.results[0].stories
+                })
+        })
+
+        //ERROR HANDLER
+        .catch(function (error) {
+            console.log("ERROR: " + error)
+            res.send(error)
+            res.status(404)
+        })
+})
+
+app.post("/Marvel_Events/:id", (req, res)=> {
+    const id = req.params.id
+    //Validation
+    const END_POINT = `http://gateway.marvel.com/v1/public/events/${id}?ts=1000&apikey=${API_KEY}&hash=${HASH}`
+    console.log("END_POINT: " + END_POINT)
+    axios.get(END_POINT)
+        .then(function(response) {
+            console.log("RES: "+ response.data)
+            res.json(
+                {
+                    characters: response.data.data.results[0].characters
+                })
+        })
+
+        //ERROR HANDLER
+        .catch(function (error) {
+            console.log("ERROR: " + error)
+            res.send(error)
+            res.status(404)
+        })
+})
+
+app.post("/Marvel_Creators/:id", (req, res)=> {
+    const id = req.params.id
+    const END_POINT = `http://gateway.marvel.com/v1/public/creators/${id}?ts=1000&apikey=${API_KEY}&hash=${HASH}`
+
+    //Validation
+    console.log("END_POINT: " + END_POINT)
+    axios.get(END_POINT)
+        .then(function(response) {
+            console.log("RES: "+ response.data)
+            res.json(
+                {
+                    creator: response.data.data.results[5]
+                })
+        })
+
+        //ERROR HANDLER
+        .catch(function (error) {
+            console.log("ERROR: " + error)
+            res.send(error)
+        })
+})
+
+app.post("/Marvel_Series/:id", (req, res)=> {
+    const id = req.params.id
+    const END_POINT = `http://gateway.marvel.com/v1/public/series?ts=1000&apikey=${API_KEY}&hash=${HASH}`
+
+    //Validation
+    console.log("END_POINT: " + END_POINT)
+    axios.get(END_POINT)
+        .then(function(response) {
+            console.log("RES: "+ response.data)
+            res.json(
+                {
+                    serie: response.data.data.results[0]
+                })
+        })
+
+        //ERROR HANDLER
+        .catch(function (error) {
+            console.log("ERROR: " + error)
+            res.send(error)
+        })
+})
+
+app.post("/Marvel_comics_events/:id", (req, res)=> {
+
+    const id = req.params.id
+
+    const END_POINT = `http://gateway.marvel.com/v1/public/comics/${id}/events?ts=1000&apikey=${API_KEY}&hash=${HASH}`
+    console.log("END_POINT: " + END_POINT)
+    axios.get(END_POINT)
+        .then(function(response) {
+            console.log("RES: "+ response.data)
+            res.json(
+                {
+                    name: response.data
+                })
+        })
+
+        //ERROR HANDLER
+        .catch(function (error) {
+            console.log("ERROR: " + error)
+            res.send(error)
+        })
+})
+
 
 //Server running
 app.listen(port, () => {
